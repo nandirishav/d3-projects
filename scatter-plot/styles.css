@@ -1,0 +1,8 @@
+body {
+    margin: 0;
+    overflow: hidden;
+  }
+  text {
+    font-size: 24px;
+    font-family: 'Share Tech', sans-serif;
+  }
