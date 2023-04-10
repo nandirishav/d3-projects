@@ -1,4 +1,6 @@
-const { csv, select, scaleLinear, min, max, extent, axisLeft, axisBottom } = d3;
+import { scatterPlot } from "./scatterPlot.js";
+
+const { csv, select } = d3;
 
 //tweakable
 const csvUrl = [
@@ -17,60 +19,32 @@ const parseRow = (d) => {
   return d;
 };
 
-const xValue = (d) => d.petal_length;
-const yValue = (d) => d.sepal_length;
-const margins = {
-  top: 20,
-  right: 20,
-  bottom: 60,
-  left: 60,
-};
-const radius = 5;
-
 const width = window.innerWidth;
 const height = window.innerHeight;
-const svg = select("body")
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height);
 
-//generic
-const main = async () => {
-  const data = await csv(csvUrl, parseRow);
+export function myFunction() {
+  const svg = select("body")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-  //if u pass value to the domain it acts as a settter
-  // else it acts as a getter
-  const x = scaleLinear()
-    .domain(extent(data, xValue))
-    .range([margins.left, width - margins.right]);
-  const y = scaleLinear()
-    .domain(extent(data, yValue))
-    .range([height - margins.bottom, margins.top]);
-
-  const marks = data.map((d) => ({
-    x: x(xValue(d)),
-    y: y(yValue(d)),
-  }));
-
-  svg
-    .selectAll("circle")
-    .data(marks)
-    .join("circle")
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
-    .attr("r", radius)
-    .attr("fill", "blue")
-    .attr("stroke", "black")
-    .attr("stroke-width", 2);
-
-  svg
-    .append("g")
-    .attr("transform", `translate(${margins.left},0)`)
-    .call(axisLeft(y));
-  svg
-    .append("g")
-    .attr("transform", `translate(0,${height - margins.bottom})`)
-    .call(axisBottom(x));
-};
-
-main();
+  //generic
+  const main = async () => {
+    svg.call(
+      scatterPlot()
+        .width(width)
+        .height(height)
+        .data(await csv(csvUrl, parseRow))
+        .xValue((d) => d.petal_length)
+        .yValue((d) => d.sepal_length)
+        .margins({
+          top: 20,
+          right: 20,
+          bottom: 60,
+          left: 60,
+        })
+        .radius(5)
+    );
+  };
+  main();
+}
