@@ -9,7 +9,7 @@ export const donutChart = () => {
     // append the svg object to the div called 'my_dataviz'
     const svg = selection
       .append("g")
-      .attr("transform", `translate(${width / 2},${height / 2})`);
+      .attr("transform", `translate(${width / 2},${height / 2})`); //for centering pie chart in the svg
 
     // set the color scale
     const color = d3
